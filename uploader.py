@@ -2,28 +2,25 @@ import numpy as np
 import pandas as pd 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from os import path
 from PIL import Image
-import csv
-from subprocess import check_output
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from flask import Flask, render_template, request
-from werkzeug import secure_filename
+
 app = Flask(__name__)
 
 @app.route('/')
 def index():
 	return render_template('index.html')
 	
-@app.route('/result', methods = ['GET','POST'])
-def result():
+@app.route('/upload', methods = ['GET','POST'])
+def upload():
 	file=request.files['inputFile']
 	data=file.read()
 	#print(type(data))
 	data=data.decode("utf-8")
 	#print(type(data))
-	make_wordcloud(data,"/home/stud/Pictures/rab.jpg")
-	return render_template('result.html')
+	make_wordcloud(data,"rab.jpg")
+	return "SUCCESSFULLY SAVED!"
 
 def make_wordcloud(content, input_mask):
 	stopwords = set(STOPWORDS)
@@ -47,7 +44,7 @@ def make_wordcloud(content, input_mask):
 	plt.axis("off")
 	plt.tight_layout(pad=0)
 	#plt.show()
-	plt.savefig("/home/stud/Pictures/output_wordcloud.png")
+	plt.savefig("output_wordcloud.png")
 	
 if __name__ == '__main__':
 	app.run(debug = True)
